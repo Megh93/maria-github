@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background: url('https://www.surveylegend.com/wordpress/wp-content/uploads/2021/02/happy-employees.png') no-repeat center center/cover;
+            color: white;
+        }
+        form {
+            display: inline-block;
+            text-align: left;
+            margin-top: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        form label, form input, form button {
+            display: block;
+            margin-bottom: 10px;
+        }
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        form button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" style="color: white; text-decoration: none;">Back to Main Page</a>
+    </header>
+    <main>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+
+            <button type="button" onclick="login()">Login</button>
+            <button type="button" onclick="window.location.href='forgot_password.html'">Forgot Password?</button>
+        </form>
+    </main>
+    <script>
+        // Function to load saved username
+        function loadSavedData() {
+            const savedData = JSON.parse(localStorage.getItem('loginData'));
+            if (savedData) {
+                document.getElementById('username').value = savedData.username;
+            }
+        }
+
+        // Function to handle login
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const savedData = JSON.parse(localStorage.getItem('loginData'));
+            if (savedData) {
+                if (savedData.username === username && savedData.password === password) {
+                    alert('Login Successful!');
+                } else if (savedData.username === username && savedData.password !== password) {
+                    alert('Incorrect Password.');
+                } else {
+                    alert('New user detected. Saving your credentials.');
+                    const loginData = { username, password };
+                    localStorage.setItem('loginData', JSON.stringify(loginData));
+                    alert('Account Created! Login Successful.');
+                }
+            } else {
+                // Save login data for the first user
+                const loginData = { username, password };
+                localStorage.setItem('loginData', JSON.stringify(loginData));
+                alert('Account Created! Login Successful.');
+            }
+        }
+
+        // Load saved username on page load
+        window.onload = loadSavedData;
+    </script>
+</body>
+</html>
